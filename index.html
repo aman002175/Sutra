@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sutra AI Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dark">
+  <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+  <div class="chat-container" id="chatBox">
+    <div class="message bot">नमस्ते! मैं <strong>Sutra</strong> हूँ 😊<br/>आपका AI साथी!</div>
+  </div>
+  <div class="input-container">
+    <button onclick="startListening()" title="Voice Input">🎤</button>
+    <input type="text" id="userInput" placeholder="कुछ पूछें..." />
+    <button onclick="sendMessage()">भेजें</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
