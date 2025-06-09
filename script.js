@@ -72,3 +72,28 @@ function startListening() {
 userInput.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') sendMessage();
 });
+// ✅ नया चैट शुरू करने का फंक्शन ऐड करें
+function startNewChat() {
+  localStorage.removeItem('chatHistory');
+  document.getElementById('chatBox').innerHTML = '';
+  
+  // वेलकम मैसेज दिखाएं
+  appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>नया चैट शुरू हुआ!", 'bot');
+}
+
+// ✅ चैट हिस्ट्री सेव करने का अपडेटेड फंक्शन
+function saveToHistory(text, sender) {
+  let history = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  history.push({ text, sender, timestamp: new Date().toISOString() });
+  localStorage.setItem('chatHistory', JSON.stringify(history));
+}
+
+// ✅ पेज लोड पर हिस्ट्री लोड करें
+window.onload = () => {
+  const history = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  if(history.length === 0) {
+    appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>आपका हिंदी सहायक!", 'bot');
+  } else {
+    history.forEach(msg => appendMessage(msg.text, msg.sender));
+  }
+};
