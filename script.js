@@ -14,7 +14,7 @@ function sendMessage() {
   saveToHistory(text, 'user');
   userInput.value = '';
   showTypingIndicator();
-  fetch("http://localhost:3000/chat", {
+  fetch("https://sutra.onrender.com/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: text })
