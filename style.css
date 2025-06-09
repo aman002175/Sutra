@@ -51,3 +51,21 @@ body.light .theme-toggle { color: #000; }
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* ✅ नए बटन के लिए स्टाइल */
+.new-chat-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 8px 16px;
+  background-color: #00ffff;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+header {
+  position: relative;
+  height: 50px;
+}
