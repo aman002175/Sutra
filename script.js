@@ -24,7 +24,7 @@ function sendMessage() {
     lowerText.includes("tumhe kisne banaya") ||
     lowerText.includes("who made you")
   ) {
-    const customReply = "मेरा नाम Sutra है। मुझे Raj Kumar ने बनाया है। 😊";
+    const customReply = "मेरा नाम Sutra है। मुझे Aman bishnoi ने बनाया है। 😊";
     appendMessage(customReply, "bot");
     saveToHistory(customReply, "bot");
     chatBox.scrollTop = chatBox.scrollHeight;
