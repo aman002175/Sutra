@@ -151,3 +151,6 @@ function showChatHistory() {
   const historyWindow = window.open("", "_blank", "width=400,height=600,scrollbars=yes");
   historyWindow.document.write(`<pre style="white-space: pre-wrap; font-family: sans-serif;">${historyText}</pre>`);
 }
+function replaceGoogleWithSutra(text) {
+  return text.replace(/google/gi, "Sutra AI");
+}
