@@ -157,3 +157,19 @@ function replaceGoogleWithSutra(text) {
 const botReply = replaceGoogleWithSutra(data.reply);
 appendMessage(botReply, 'bot');
 saveToHistory(botReply, 'bot');
+function startNewChat() {
+  // Get existing chat history
+  const currentHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  if (currentHistory.length > 0) {
+    // Get old chats array from localStorage (or empty)
+    const oldChats = JSON.parse(localStorage.getItem('oldChats')) || [];
+    // Add current chat to oldChats
+    oldChats.push(currentHistory);
+    // Save updated oldChats back to localStorage
+    localStorage.setItem('oldChats', JSON.stringify(oldChats));
+  }
+  // Clear current chat history
+  localStorage.removeItem('chatHistory');
+  document.getElementById('chatBox').innerHTML = '';
+  appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>नया चैट शुरू हुआ!", 'bot', true);
+}
