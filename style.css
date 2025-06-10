@@ -138,3 +138,24 @@ header div {
     text-align: center;
   }
 }
+.sutra-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #00ffff;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 8px #222, 0 1px 0 #fff;
+  margin-bottom: 10px;
+  text-align: center;
+  user-select: none;
+}
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  position: relative;
+  height: auto;
+}
+/* Rest of your header/button CSS... */
