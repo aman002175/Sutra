@@ -120,7 +120,7 @@ function startListening() {
     sendMessage();
   };
   recognition.onerror = function() {
-    appendMessage("❗ वॉइस इनपुट में त्रुटि आई।", 'bot');
+    appendMessage("❗ वॉइस इनपुट में त्रुटि आई 👹।", 'bot');
   };
 }
 
@@ -157,9 +157,6 @@ function showChatHistory() {
 function replaceGoogleWithSutra(text) {
   return text.replace(/google/gi, "Sutra AI");
 }
-const botReply = replaceGoogleWithSutra(data.reply);
-appendMessage(botReply, 'bot');
-saveToHistory(botReply, 'bot');
 function startNewChat() {
   // Get existing chat history
   const currentHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
