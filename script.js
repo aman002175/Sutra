@@ -154,3 +154,6 @@ function showChatHistory() {
 function replaceGoogleWithSutra(text) {
   return text.replace(/google/gi, "Sutra AI");
 }
+const botReply = replaceGoogleWithSutra(data.reply);
+appendMessage(botReply, 'bot');
+saveToHistory(botReply, 'bot');
