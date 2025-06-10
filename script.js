@@ -80,9 +80,11 @@ function startListening() {
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.lang = 'hi-IN';
   recognition.start();
+
   recognition.onresult = function(event) {
     const transcript = event.results[0][0].transcript;
     userInput.value = transcript;
+    sendMessage(); // ← यह लाइन जोड़ना ज़रूरी है
   };
 }
 
