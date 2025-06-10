@@ -86,3 +86,20 @@ header {
 body.light .chat-history-btn {
   background-color: #ff8c00;
 }
+header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+header button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
