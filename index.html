@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,21 +6,19 @@
   <title>Sutra AI Chatbot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
- <!-- ✅ यह कोड <body> टैग के ठीक अंदर जोड़ें -->
 <body class="dark">
   <header>
    <div>
-     <button class="chat-history-btn" onclick="showChatHistory()">📜 चैट हिस्ट्री</button>
-    <button onclick="startNewChat()" class="new-chat-btn">नया चैट</button>
-    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+     <button class="chat-history-btn" onclick="showChatHistory()" aria-label="Chat History" title="Chat History">📜 चैट हिस्ट्री</button>
+     <button onclick="startNewChat()" class="new-chat-btn" aria-label="New Chat" title="New Chat">नया चैट</button>
+     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme" title="Toggle Theme">🌗</button>
     </div>
   </header>
-  <!-- बाकी का कोड वैसे ही रहेगा --> 
   <div class="chat-container" id="chatBox">
     <div class="message bot">नमस्ते! मैं <strong>Sutra</strong> हूँ 😊<br/>आपका AI साथी!</div>
   </div>
   <div class="input-container">
-    <button onclick="startListening()" title="Voice Input">🎤</button>
+    <button onclick="startListening()" title="Voice Input" aria-label="Voice Input">🎤</button>
     <input type="text" id="userInput" placeholder="कुछ पूछें..." />
     <button onclick="sendMessage()">भेजें</button>
   </div>

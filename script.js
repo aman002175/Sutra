@@ -1,21 +1,33 @@
-
 const chatBox = document.getElementById('chatBox');
 const userInput = document.getElementById('userInput');
 
+// Utility: Sanitize text to avoid HTML injection (basic)
+function sanitize(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Unified chat history loader
 window.onload = () => {
-  const history = JSON.parse(localStorage.getItem("chatHistory")) || [];
-  history.forEach(msg => appendMessage(msg.text, msg.sender));
+  const history = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  if(history.length === 0) {
+    appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>आपका हिंदी सहायक!", 'bot', true);
+  } else {
+    history.forEach(msg => appendMessage(msg.text, msg.sender, msg.isHtml));
+  }
 };
+
 function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
-  appendMessage(text, 'user');
-  saveToHistory(text, 'user');
+  appendMessage(sanitize(text), 'user');
+  saveToHistory(sanitize(text), 'user');
   userInput.value = "";
   showTypingIndicator();
 
-  // ✅ Custom response
+  // Custom response
   const lowerText = text.toLowerCase();
   if (
     lowerText.includes("tumhara naam") ||
@@ -28,6 +40,7 @@ function sendMessage() {
     appendMessage(customReply, "bot");
     saveToHistory(customReply, "bot");
     chatBox.scrollTop = chatBox.scrollHeight;
+    removeTypingIndicator();
     return;
   }
 
@@ -36,26 +49,39 @@ function sendMessage() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: text })
   })
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) throw new Error("Server Error");
+    return res.json();
+  })
   .then(data => {
     removeTypingIndicator();
-    appendMessage(data.reply, 'bot');
-    saveToHistory(data.reply, 'bot');
+    appendMessage(sanitize(data.reply), 'bot');
+    saveToHistory(sanitize(data.reply), 'bot');
+    chatBox.scrollTop = chatBox.scrollHeight;
+  })
+  .catch(() => {
+    removeTypingIndicator();
+    appendMessage("❗ क्षमा करें, सर्वर से उत्तर नहीं मिला। कृपया बाद में प्रयास करें।", 'bot');
+    saveToHistory("❗ क्षमा करें, सर्वर से उत्तर नहीं मिला। कृपया बाद में प्रयास करें।", 'bot');
     chatBox.scrollTop = chatBox.scrollHeight;
   });
 }
 
-function appendMessage(text, sender) {
+function appendMessage(text, sender, isHtml = false) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message', sender);
-  msgDiv.textContent = text;
+  if(isHtml) {
+    msgDiv.innerHTML = text;
+  } else {
+    msgDiv.textContent = text;
+  }
   chatBox.appendChild(msgDiv);
 }
 
-function saveToHistory(text, sender) {
-  let history = JSON.parse(localStorage.getItem("chatHistory")) || [];
-  history.push({ text, sender });
-  localStorage.setItem("chatHistory", JSON.stringify(history));
+function saveToHistory(text, sender, isHtml = false) {
+  let history = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  history.push({ text, sender, timestamp: new Date().toISOString(), isHtml });
+  localStorage.setItem('chatHistory', JSON.stringify(history));
 }
 
 function showTypingIndicator() {
@@ -77,6 +103,10 @@ function toggleTheme() {
 }
 
 function startListening() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    appendMessage("❗ आपका ब्राउज़र वॉइस इनपुट सपोर्ट नहीं करता।", 'bot');
+    return;
+  }
   const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
   recognition.lang = 'hi-IN';
   recognition.start();
@@ -84,56 +114,40 @@ function startListening() {
   recognition.onresult = function(event) {
     const transcript = event.results[0][0].transcript;
     userInput.value = transcript;
-    sendMessage(); // ← यह लाइन जोड़ना ज़रूरी है
+    sendMessage();
+  };
+  recognition.onerror = function() {
+    appendMessage("❗ वॉइस इनपुट में त्रुटि आई।", 'bot');
   };
 }
 
 userInput.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') sendMessage();
 });
-// ✅ नया चैट शुरू करने का फंक्शन ऐड करें
+
+// नया चैट शुरू करने का फंक्शन
 function startNewChat() {
   localStorage.removeItem('chatHistory');
   document.getElementById('chatBox').innerHTML = '';
-  
-  // वेलकम मैसेज दिखाएं
-  appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>नया चैट शुरू हुआ!", 'bot');
+  appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>नया चैट शुरू हुआ!", 'bot', true);
 }
 
-// ✅ चैट हिस्ट्री सेव करने का अपडेटेड फंक्शन
-function saveToHistory(text, sender) {
-  let history = JSON.parse(localStorage.getItem('chatHistory')) || [];
-  history.push({ text, sender, timestamp: new Date().toISOString() });
-  localStorage.setItem('chatHistory', JSON.stringify(history));
-}
-
-// ✅ पेज लोड पर हिस्ट्री लोड करें
-window.onload = () => {
-  const history = JSON.parse(localStorage.getItem('chatHistory')) || [];
-  if(history.length === 0) {
-    appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>आपका हिंदी सहायक!", 'bot');
-  } else {
-    history.forEach(msg => appendMessage(msg.text, msg.sender));
-  }
-};
+// चैट हिस्ट्री सेव करने और दिखाने का फंक्शन
 function showChatHistory() {
   const oldChats = JSON.parse(localStorage.getItem("oldChats")) || [];
-
   if (oldChats.length === 0) {
     alert("कोई पुरानी चैट उपलब्ध नहीं है।");
     return;
   }
-
   let historyText = '';
   oldChats.forEach((chat, index) => {
-    historyText += `🗂 चैट #${index + 1}:\n`;
+    historyText += `📜 चैट #${index + 1}:\n`;
     chat.forEach(msg => {
       const who = msg.sender === 'user' ? '👤 आप' : '🤖 Sutra';
       historyText += `${who}: ${msg.text}\n`;
     });
     historyText += '\n-----------------------------\n\n';
   });
-
   const historyWindow = window.open("", "_blank", "width=400,height=600,scrollbars=yes");
   historyWindow.document.write(`<pre style="white-space: pre-wrap; font-family: sans-serif;">${historyText}</pre>`);
 }
