@@ -35,6 +35,8 @@ function sendMessage() {
     lowerText.includes("what is your name") ||
     lowerText.includes("tumhe kisne banaya") ||
     lowerText.includes("who made you")
+    lowerText.includes("Tumhe kisne bnaya")
+    lowerText.includes("tum kon ho")
   ) {
     const customReply = "मेरा नाम Sutra है। मुझे Aman bishnoi ने बनाया है। 😊";
     appendMessage(customReply, "bot");
