@@ -55,8 +55,9 @@ function sendMessage() {
   })
   .then(data => {
     removeTypingIndicator();
-    appendMessage(sanitize(data.reply), 'bot');
-    saveToHistory(sanitize(data.reply), 'bot');
+    const botReply = replaceGoogleWithSutra(sanitize(data.reply));
+     appendMessage(botReply, 'bot');
+     saveToHistory(botReply, 'bot');
     chatBox.scrollTop = chatBox.scrollHeight;
   })
   .catch(() => {
