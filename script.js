@@ -116,3 +116,24 @@ window.onload = () => {
     history.forEach(msg => appendMessage(msg.text, msg.sender));
   }
 };
+function showChatHistory() {
+  const oldChats = JSON.parse(localStorage.getItem("oldChats")) || [];
+
+  if (oldChats.length === 0) {
+    alert("कोई पुरानी चैट उपलब्ध नहीं है।");
+    return;
+  }
+
+  let historyText = '';
+  oldChats.forEach((chat, index) => {
+    historyText += `🗂 चैट #${index + 1}:\n`;
+    chat.forEach(msg => {
+      const who = msg.sender === 'user' ? '👤 आप' : '🤖 Sutra';
+      historyText += `${who}: ${msg.text}\n`;
+    });
+    historyText += '\n-----------------------------\n\n';
+  });
+
+  const historyWindow = window.open("", "_blank", "width=400,height=600,scrollbars=yes");
+  historyWindow.document.write(`<pre style="white-space: pre-wrap; font-family: sans-serif;">${historyText}</pre>`);
+}
