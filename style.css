@@ -122,16 +122,19 @@ header div {
 
 @media (max-width: 600px) {
   header div {
-    flex-direction: column;
+    flex-direction: row !important;
     align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
   .theme-toggle,
   .new-chat-btn,
   .chat-history-btn {
-    position: relative !important;
-    top: unset !important;
-    left: unset !important;
-    right: unset !important;
-    margin: 5px 0;
+    position: static !important;
+    margin: 0 !important;
+    width: auto;
+    max-width: none;
+    display: inline-block;
+    text-align: center;
   }
 }
