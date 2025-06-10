@@ -103,3 +103,20 @@ header button {
   cursor: pointer;
   white-space: nowrap;
 }
+header div {
+  display: flex;
+  justify-content: center; /* सभी बटन को सेंटर में रखें */
+  gap: 10px; /* बटन के बीच का अंतर */
+  flex-wrap: wrap; /* ताकि मोबाइल में नीचे आ जाएं */
+}
+
+.chat-history-btn,
+.new-chat-btn,
+.theme-toggle {
+  padding: 10px 16px;
+  border-radius: 25px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
