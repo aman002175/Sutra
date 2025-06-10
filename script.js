@@ -6,14 +6,31 @@ window.onload = () => {
   const history = JSON.parse(localStorage.getItem("chatHistory")) || [];
   history.forEach(msg => appendMessage(msg.text, msg.sender));
 };
-
 function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
+
   appendMessage(text, 'user');
   saveToHistory(text, 'user');
-  userInput.value = '';
+  userInput.value = "";
   showTypingIndicator();
+
+  // ✅ Custom response
+  const lowerText = text.toLowerCase();
+  if (
+    lowerText.includes("tumhara naam") ||
+    lowerText.includes("tumhara naam kya hai") ||
+    lowerText.includes("what is your name") ||
+    lowerText.includes("tumhe kisne banaya") ||
+    lowerText.includes("who made you")
+  ) {
+    const customReply = "मेरा नाम Sutra है। मुझे Raj Kumar ने बनाया है। 😊";
+    appendMessage(customReply, "bot");
+    saveToHistory(customReply, "bot");
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return;
+  }
+
   fetch("https://sutra.onrender.com/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
