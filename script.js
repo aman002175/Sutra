@@ -8,6 +8,11 @@ function sanitize(text) {
   return div.innerHTML;
 }
 
+// Helper: Replace "google" with "Sutra AI"
+function replaceGoogleWithSutra(text) {
+  return text.replace(/google/gi, "Sutra AI");
+}
+
 // Unified chat history loader
 window.onload = () => {
   const history = JSON.parse(localStorage.getItem('chatHistory')) || [];
@@ -35,10 +40,9 @@ function sendMessage() {
     lowerText.includes("what is your name") ||
     lowerText.includes("tumhe kisne banaya") ||
     lowerText.includes("who made you")
-    lowerText.includes("Tumhe kisne bnaya")
-    lowerText.includes("tum kon ho")
   ) {
-    const customReply = "मेरा नाम Sutra है। मुझे Aman bishnoi ने बनाया है। 😊";
+    let customReply = "मेरा नाम Sutra है। मुझे Aman bishnoi ने बनाया है। 😊";
+    customReply = replaceGoogleWithSutra(customReply);
     appendMessage(customReply, "bot");
     saveToHistory(customReply, "bot");
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -57,15 +61,17 @@ function sendMessage() {
   })
   .then(data => {
     removeTypingIndicator();
+    // Replace 'google' with 'Sutra AI' before showing bot reply
     const botReply = replaceGoogleWithSutra(sanitize(data.reply));
-     appendMessage(botReply, 'bot');
-     saveToHistory(botReply, 'bot');
+    appendMessage(botReply, 'bot');
+    saveToHistory(botReply, 'bot');
     chatBox.scrollTop = chatBox.scrollHeight;
   })
   .catch(() => {
     removeTypingIndicator();
-    appendMessage("❗ क्षमा करें, सर्वर से उत्तर नहीं मिला। कृपया बाद में प्रयास करें।", 'bot');
-    saveToHistory("❗ क्षमा करें, सर्वर से उत्तर नहीं मिला। कृपया बाद में प्रयास करें।", 'bot');
+    const errorMsg = "❗ क्षमा करें, सर्वर से उत्तर नहीं मिला। कृपया बाद में प्रयास करें।";
+    appendMessage(errorMsg, 'bot');
+    saveToHistory(errorMsg, 'bot');
     chatBox.scrollTop = chatBox.scrollHeight;
   });
 }
@@ -120,7 +126,7 @@ function startListening() {
     sendMessage();
   };
   recognition.onerror = function() {
-    appendMessage("❗ वॉइस इनपुट में त्रुटि आई 👹।", 'bot');
+    appendMessage("❗ वॉइस इनपुट में त्रुटि आई।", 'bot');
   };
 }
 
@@ -130,6 +136,17 @@ userInput.addEventListener('keydown', function(e) {
 
 // नया चैट शुरू करने का फंक्शन
 function startNewChat() {
+  // Get existing chat history
+  const currentHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+  if (currentHistory.length > 0) {
+    // Get old chats array from localStorage (or empty)
+    const oldChats = JSON.parse(localStorage.getItem('oldChats')) || [];
+    // Add current chat to oldChats
+    oldChats.push(currentHistory);
+    // Save updated oldChats back to localStorage
+    localStorage.setItem('oldChats', JSON.stringify(oldChats));
+  }
+  // Clear current chat history
   localStorage.removeItem('chatHistory');
   document.getElementById('chatBox').innerHTML = '';
   appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>नया चैट शुरू हुआ!", 'bot', true);
@@ -153,23 +170,4 @@ function showChatHistory() {
   });
   const historyWindow = window.open("", "_blank", "width=400,height=600,scrollbars=yes");
   historyWindow.document.write(`<pre style="white-space: pre-wrap; font-family: sans-serif;">${historyText}</pre>`);
-}
-function replaceGoogleWithSutra(text) {
-  return text.replace(/google/gi, "Sutra AI");
-}
-function startNewChat() {
-  // Get existing chat history
-  const currentHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
-  if (currentHistory.length > 0) {
-    // Get old chats array from localStorage (or empty)
-    const oldChats = JSON.parse(localStorage.getItem('oldChats')) || [];
-    // Add current chat to oldChats
-    oldChats.push(currentHistory);
-    // Save updated oldChats back to localStorage
-    localStorage.setItem('oldChats', JSON.stringify(oldChats));
-  }
-  // Clear current chat history
-  localStorage.removeItem('chatHistory');
-  document.getElementById('chatBox').innerHTML = '';
-  appendMessage("नमस्ते! मैं Sutra AI हूँ 😊<br/>नया चैट शुरू हुआ!", 'bot', true);
 }
