@@ -69,3 +69,20 @@ header {
   position: relative;
   height: 50px;
 }
+.chat-history-btn {
+  position: absolute;
+  top: 60px;
+  left: 15px;
+  background-color: #ffa500;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+body.light .chat-history-btn {
+  background-color: #ff8c00;
+}
